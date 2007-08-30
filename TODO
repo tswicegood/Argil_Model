@@ -1,0 +1,13 @@
+Argil_Model package
+===================
+* Has a Container that contains one or more model objects that can:
+    * Use annotations to determine:
+        - valid values for contained models
+        - determine primary key(es)
+        - determine table location
+    * Track changes that have yet to be saved
+    * Revert changes until save() is invoked
+    * save() can notify a callback that a model should be saved
+* Has a Mapper that can:
+    * read data from provided PDO data source
+    * save changed data when notified by container
