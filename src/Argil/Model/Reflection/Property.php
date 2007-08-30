@@ -16,13 +16,9 @@ class Argil_Model_Reflection_Property
     {
         $doc = $this->_decorated->getDocComment();
         preg_match('/@is ([^\s]+)/', $doc, $matches);
-        switch ($matches[1]) {
-            case 'string' :
-                return is_string($value);
-            
-            case 'int' :
-                return is_int($value);
-        }
+        $specification_name = 'Argil_Model_Specification_' . ucfirst($type);
+        $specification = new $specification_name($value);
+        return $specification->isValid();
     }
     
     /**

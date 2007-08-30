@@ -17,6 +17,16 @@ class ArgilReflectableClass
      * @is int
      */
     public $intOnly = 123;
+    
+    /**
+     * @is AlwaysFalse
+     */
+    public $neverPasses = true;
+    
+    /**
+     * @is IceRing
+     */
+    public $onlyWhen = '';
 }
 
 $reflection = new Argil_Model_Reflection_Property(
@@ -34,7 +44,36 @@ assert('!$reflection->isValid("Hello World")');
 assert('!$reflection->isValid("123")');
 assert('$reflection->isValid(123)');
 
-// TODO: Add more tests that require the loading of a Specification object
+
+class Argil_Model_Specification_AlwaysFalse implements Argil_Model_Specification
+{
+    public function isValid()
+    {
+        return false;
+    }
+}
+
+$reflection = new Argil_Model_Reflection_Property(
+    new ReflectionProperty('ArgilReflectableClass', 'neverPasses')
+);
+assert('!$reflection->isValid(true)');
+assert('!$reflection->isValid(false)');
+
+
+class Argil_Model_Specification_IceRing extends Argil_Model_Specification_Abstract
+{
+    public function __construct($value)
+    {
+        $this->_valid = $value == "when hell freezes over";
+    }
+}
+
+$reflection = new Argil_Model_Reflection_Property(
+    new ReflectionProperty('ArgilReflectableClass', 'onlyWhen')
+);
+
+assert('!$reflection->isValid("when pigs fly")');
+assert('$reflection->isValid("when hell freezes over")');
 
 ?>
 ===DONE===
