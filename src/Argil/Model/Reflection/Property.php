@@ -9,9 +9,6 @@ class Argil_Model_Reflection_Property
         $this->_decorated = $reflection;
     }
     
-    /**
-     * @todo refactor to use Specification object
-     */
     public function isValid($value)
     {
         $doc = $this->_decorated->getDocComment();
