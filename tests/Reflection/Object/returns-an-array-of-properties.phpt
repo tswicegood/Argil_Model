@@ -13,7 +13,10 @@ class SampleReflectionObject
     private $privateProperty;
 }
 
-$reflection = new Argil_Model_Reflection_Object(new SampleReflectionObject());
+
+$reflection = new Argil_Model_Reflection_Object(
+    new ReflectionObject(new SampleReflectionObject())
+);
 $properties = $reflection->getProperties();
 
 assert('is_array($properties) || $properties instanceof ArrayAccess');
