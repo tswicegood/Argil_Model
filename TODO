@@ -1,13 +1,59 @@
-Argil_Model package
-===================
-* Has a Container that contains one or more model objects that can:
-    * Use annotations to determine:
-        - valid values for contained models
-        - determine primary key(es)
-        - determine table location
-    * Track changes that have yet to be saved
-    * Revert changes until save() is invoked
-    * save() can notify a callback that a model should be saved
-* Has a Mapper that can:
-    * read data from provided PDO data source
-    * save changed data when notified by container
+* finish Reflection_Property
+* finish Reflection_PropertyList
+
+* make Reflection_Property use Annotation_Property_* objects to handle various functions
+  (example: @is -> Annotation_Property_Is, @isNot -> Annotation_Property_IsNot, etc.)
+* make Container utilize Reflection_Properties to handle determining if value is valid
+* add Model level annotations
+    * create dispatcher to take raw parsed and pass off to Annotation_Object_* to handle
+    * allow object level validation (i.e., contains fully valid address)
+* ability to handle one-to-many relationship:
+    /**
+     * @has many Email
+     * @has one Person
+     */
+    class Customer { }
+    $customer->emails->current()->domain;
+    $customer->person->full_name;
+* [???] add ability to have setters/getters called when working with a property:
+    class Person {
+        public static function set_full_name($value, Argil_Model_Container $container) {
+            // assume only "First Last"
+            $names = explode(' ', $value);
+            $container->first_name = $names[0];
+            $container->last_name = $names[1];
+        }
+        
+        public static function get_full_name(Argil_Model_Container $container) {
+            return $container->first_name . ' '. $container->last_name;
+        }
+    }
+* add Locator object:
+    - findBy<col>($value)
+    - findByFirstName($first_name) - "first_name = '$first_name'", etc.
+    - find(int $id)
+    - find(Argil_Model_Criteria $criteria)
+
+
+Future Phase
+------------
+* add in set of generic specifications:
+    * string
+    * int
+    * length
+    * GreaterThan
+    * LesserThan
+    * Equals
+    * GreaterThanOrEquals
+    * LesserThanOrEquals
+    * NotEquals
+    * RegExp
+    * NotRegExp
+    * Date
+    * FutureDate
+    * PastDate
+* consider extended set of specifications:
+    * SSN
+    * CC #
+    * USPostalCode
+    * Address
